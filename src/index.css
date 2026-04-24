@@ -1,0 +1,109 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #16161f;
+  --surface: #1c1c28;
+  --surface2: #22222f;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f5;
+  --text2: #8888aa;
+  --text3: #55556a;
+  --accent: #7c6bff;
+  --accent2: #a89dff;
+  --accent-glow: rgba(124,107,255,0.18);
+  --green: #22d99a;
+  --green-bg: rgba(34,217,154,0.1);
+  --red: #ff5c7c;
+  --red-bg: rgba(255,92,124,0.1);
+  --amber: #ffc94d;
+  --amber-bg: rgba(255,201,77,0.1);
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 18px;
+}
+
+html, body, #root {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface2);
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent-glow);
+  color: var(--accent2);
+}
+
+/* MUI overrides */
+.MuiOutlinedInput-root {
+  font-family: var(--font-display) !important;
+  color: var(--text) !important;
+  background: var(--surface) !important;
+  border-radius: var(--radius-sm) !important;
+}
+.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border2) !important;
+}
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent) !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.MuiInputLabel-root {
+  font-family: var(--font-display) !important;
+  color: var(--text2) !important;
+}
+.MuiInputLabel-root.Mui-focused {
+  color: var(--accent2) !important;
+}
+.MuiSelect-icon {
+  color: var(--text2) !important;
+}
+.MuiMenuItem-root {
+  font-family: var(--font-display) !important;
+  color: var(--text) !important;
+}
+.MuiPaper-root {
+  background: var(--surface2) !important;
+  border: 1px solid var(--border2) !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

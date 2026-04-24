@@ -1,0 +1,86 @@
+.wrapper {
+  width: 100%;
+}
+
+.form {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 200px 180px auto;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.fieldLarge,
+.fieldSmall {
+  min-width: 0;
+}
+
+.btn {
+  height: 40px;
+  min-width: 90px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.02em;
+  align-self: flex-start;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--accent2);
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btnSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+.formErrors {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+@media (max-width: 768px) {
+  .row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+  }
+  .fieldLarge {
+    grid-column: 1 / -1;
+  }
+  .btn {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
