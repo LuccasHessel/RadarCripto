@@ -1,85 +1,86 @@
-.card {
+.cartao {
   position: relative;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 18px 20px;
+  padding: 16px 48px 16px 16px; /* right padding reserves space for fav button */
   display: grid;
-  grid-template-columns: 36px 1fr auto auto;
+  grid-template-columns: 32px minmax(0, 1fr) minmax(120px, auto) 90px;
   grid-template-rows: auto auto;
-  gap: 10px 16px;
+  gap: 8px 12px;
   align-items: center;
-  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   animation: fadeUp 0.4s ease both;
   overflow: hidden;
 }
 
-.card::before {
+.cartao::before {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, var(--accent-glow) 0%, transparent 60%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s;
   pointer-events: none;
 }
 
-.card:hover {
+.cartao:hover {
   border-color: var(--border2);
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
-.card:hover::before {
-  opacity: 1;
-}
+.cartao:hover::before { opacity: 1; }
 
-.rank {
+.ranking {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text3);
   grid-column: 1;
   grid-row: 1;
-  text-align: center;
 }
 
-.identity {
+.identidade {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   grid-column: 2;
   grid-row: 1;
+  min-width: 0;
 }
 
 .logo {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  object-fit: cover;
+  flex-shrink: 0;
   background: var(--surface2);
 }
 
-.name {
-  font-size: 15px;
+.nomeBloco {
+  min-width: 0;
+}
+
+.nome {
+  font-size: 14px;
   font-weight: 600;
   color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
 }
 
-.symbol {
+.simbolo {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text3);
   letter-spacing: 0.08em;
-  margin-top: 1px;
+  margin-top: 2px;
 }
 
-.price {
+.preco {
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text);
   grid-column: 3;
@@ -88,46 +89,36 @@
   white-space: nowrap;
 }
 
-.change {
+.variacao {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   padding: 4px 10px;
   border-radius: 6px;
   grid-column: 4;
   grid-row: 1;
+  text-align: center;
   white-space: nowrap;
 }
 
-.positive {
-  color: var(--green);
-  background: var(--green-bg);
-}
+.positivo { color: var(--green); background: var(--green-bg); }
+.negativo  { color: var(--red);   background: var(--red-bg); }
+.neutro    { color: var(--text2); background: var(--surface2); }
 
-.negative {
-  color: var(--red);
-  background: var(--red-bg);
-}
-
-.neutral {
-  color: var(--text2);
-  background: var(--surface2);
-}
-
-.meta {
+.metadados {
   display: flex;
   gap: 24px;
   grid-column: 2 / 5;
   grid-row: 2;
 }
 
-.metaItem {
+.itemMeta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
-.metaLabel {
+.rotuloMeta {
   font-size: 10px;
   color: var(--text3);
   font-family: var(--font-mono);
@@ -135,31 +126,25 @@
   text-transform: uppercase;
 }
 
-.metaValue {
+.valorMeta {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text2);
 }
 
-.favBtn {
+.botaoFav {
   position: absolute;
   top: 14px;
-  right: 14px;
+  right: 12px;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 17px;
   color: var(--text3);
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: color 0.2s, transform 0.2s;
   line-height: 1;
   padding: 2px;
 }
 
-.favBtn:hover {
-  color: var(--amber);
-  transform: scale(1.2);
-}
-
-.favActive {
-  color: var(--amber) !important;
-}
+.botaoFav:hover { color: var(--amber); transform: scale(1.2); }
+.favAtivo { color: var(--amber) !important; }

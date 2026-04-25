@@ -1,15 +1,13 @@
-.section {
-  margin-top: 0;
-}
+.secao { margin-top: 0; }
 
-.header {
+.cabecalho {
   display: flex;
   align-items: baseline;
   gap: 10px;
   margin-bottom: 16px;
 }
 
-.label {
+.rotulo {
   font-size: 13px;
   font-family: var(--font-mono);
   letter-spacing: 0.1em;
@@ -17,24 +15,25 @@
   color: var(--text3);
 }
 
-.sublabel {
+.subrotulo {
   font-size: 12px;
   color: var(--text3);
   font-family: var(--font-mono);
 }
 
-.table {
+.tabela {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.tableHeader {
+.cabecalhoTabela {
   display: grid;
-  grid-template-columns: 28px 1fr auto auto 28px;
-  gap: 12px;
+  /* rank | nome(flex) | preco fixo | variacao fixo | fav */
+  grid-template-columns: 24px 1fr 90px 64px 24px;
+  gap: 8px;
   align-items: center;
-  padding: 0 14px 8px;
+  padding: 0 10px 8px;
   font-size: 10px;
   font-family: var(--font-mono);
   color: var(--text3);
@@ -43,12 +42,12 @@
   border-bottom: 1px solid var(--border);
 }
 
-.row {
+.linha {
   display: grid;
-  grid-template-columns: 28px 1fr auto auto 28px;
-  gap: 12px;
+  grid-template-columns: 24px 1fr 90px 64px 24px;
+  gap: 8px;
   align-items: center;
-  padding: 10px 14px;
+  padding: 9px 10px;
   border-radius: var(--radius-sm);
   background: var(--surface);
   border: 1px solid transparent;
@@ -56,33 +55,37 @@
   animation: fadeUp 0.35s ease both;
 }
 
-.row:hover {
+.linha:hover {
   background: var(--surface2);
   border-color: var(--border2);
 }
 
-.rank {
+.posicao {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text3);
 }
 
-.coin {
+.moeda {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
 }
 
 .logo {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   flex-shrink: 0;
   background: var(--surface2);
 }
 
-.name {
+.infoMoeda {
+  min-width: 0;
+}
+
+.nomeMoeda {
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
@@ -91,43 +94,43 @@
   text-overflow: ellipsis;
 }
 
-.symbol {
+.simboloMoeda {
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--text3);
   letter-spacing: 0.06em;
 }
 
-.price {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--text);
-  white-space: nowrap;
-}
-
-.change {
+.preco {
   font-family: var(--font-mono);
   font-size: 12px;
-  padding: 3px 8px;
+  color: var(--text);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.variacao {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 6px;
   border-radius: 5px;
   white-space: nowrap;
-  min-width: 64px;
-  text-align: right;
+  text-align: center;
 }
 
 .pos { color: var(--green); background: var(--green-bg); }
 .neg { color: var(--red);   background: var(--red-bg); }
 .neu { color: var(--text3); background: var(--surface2); }
 
-.fav {
+.botaoFav {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text3);
   transition: color 0.2s, transform 0.2s;
   padding: 2px;
   line-height: 1;
 }
-.fav:hover { color: var(--amber); transform: scale(1.2); }
-.favOn { color: var(--amber) !important; }
+.botaoFav:hover { color: var(--amber); transform: scale(1.2); }
+.favAtivo { color: var(--amber) !important; }

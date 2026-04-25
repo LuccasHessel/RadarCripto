@@ -1,94 +1,88 @@
 import { useState } from 'react'
-import { FavoritesProvider } from './contexts/FavoritesContext'
-import SearchForm from './components/SearchForm'
-import TopRanking from './components/TopRanking'
-import FavoritesList from './components/FavoritesList'
-import styles from './App.module.css'
+import { ProvedorFavoritos } from './contexts/ContextoFavoritos'
+import FormularioBusca from './components/FormularioBusca'
+import RankingTop from './components/RankingTop'
+import ListaFavoritos from './components/ListaFavoritos'
+import estilos from './App.module.css'
 
-const CURRENCIES = { brl: 'BRL', usd: 'USD', eur: 'EUR' }
+const MOEDAS = { brl: 'BRL', usd: 'USD', eur: 'EUR' }
 
 export default function App() {
-  const [currency, setCurrency] = useState('usd')
-  const [activeTab, setActiveTab] = useState('ranking')
+  const [moedaConversao, setMoedaConversao] = useState('usd')
+  const [abaAtiva, setAbaAtiva] = useState('ranking')
 
   return (
-    <FavoritesProvider>
-      <div className={styles.app}>
-        {/* Background grid */}
-        <div className={styles.grid} aria-hidden="true" />
+    <ProvedorFavoritos>
+      <div className={estilos.app}>
+        <div className={estilos.grade} aria-hidden="true" />
 
-        {/* Header */}
-        <header className={styles.header}>
-          <div className={styles.headerInner}>
-            <div className={styles.logo}>
-              <span className={styles.logoMark}>◈</span>
-              <span className={styles.logoText}>CryptoTrack</span>
+        <header className={estilos.cabecalho}>
+          <div className={estilos.cabecalhoInterno}>
+            <div className={estilos.logo}>
+              <span className={estilos.logoMarca}>◈</span>
+              <span className={estilos.logoTexto}>Radar Cripto</span>
             </div>
-            <nav className={styles.currencyNav}>
-              {Object.entries(CURRENCIES).map(([key, label]) => (
+            <nav className={estilos.navMoeda}>
+              {Object.entries(MOEDAS).map(([chave, rotulo]) => (
                 <button
-                  key={key}
-                  className={`${styles.currencyBtn} ${currency === key ? styles.currencyActive : ''}`}
-                  onClick={() => setCurrency(key)}
+                  key={chave}
+                  className={`${estilos.botaoMoeda} ${moedaConversao === chave ? estilos.moedaAtiva : ''}`}
+                  onClick={() => setMoedaConversao(chave)}
                 >
-                  {label}
+                  {rotulo}
                 </button>
               ))}
             </nav>
           </div>
         </header>
 
-        {/* Main layout */}
-        <main className={styles.main}>
-          {/* Left column: Search */}
-          <section className={styles.searchCol}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>Buscar moeda</h2>
-              <p className={styles.sectionSub}>
+        <main className={estilos.principal}>
+          <section className={estilos.colunaBusca}>
+            <div className={estilos.cabecalhoSecao}>
+              <h2 className={estilos.tituloBusca}>Buscar moeda</h2>
+              <p className={estilos.subtituloBusca}>
                 Digite o nome ou símbolo e configure os filtros
               </p>
             </div>
-            <SearchForm />
+            <FormularioBusca />
           </section>
 
-          {/* Right column: Ranking + Favorites */}
-          <aside className={styles.sidebar}>
-            <div className={styles.tabs}>
+          <aside className={estilos.painel}>
+            <div className={estilos.abas}>
               <button
-                className={`${styles.tab} ${activeTab === 'ranking' ? styles.tabActive : ''}`}
-                onClick={() => setActiveTab('ranking')}
+                className={`${estilos.aba} ${abaAtiva === 'ranking' ? estilos.abaAtiva : ''}`}
+                onClick={() => setAbaAtiva('ranking')}
               >
                 Ranking
               </button>
               <button
-                className={`${styles.tab} ${activeTab === 'favorites' ? styles.tabActive : ''}`}
-                onClick={() => setActiveTab('favorites')}
+                className={`${estilos.aba} ${abaAtiva === 'favoritos' ? estilos.abaAtiva : ''}`}
+                onClick={() => setAbaAtiva('favoritos')}
               >
                 Favoritos
               </button>
             </div>
-
-            <div className={styles.tabContent}>
-              {activeTab === 'ranking' && <TopRanking currency={currency} />}
-              {activeTab === 'favorites' && <FavoritesList currency={currency} />}
+            <div className={estilos.conteudoAba}>
+              {abaAtiva === 'ranking'   && <RankingTop moedaConversao={moedaConversao} />}
+              {abaAtiva === 'favoritos' && <ListaFavoritos moedaConversao={moedaConversao} />}
             </div>
           </aside>
         </main>
 
-        <footer className={styles.footer}>
+        <footer className={estilos.rodape}>
           <span>Dados via</span>
           <a
             href="https://www.coingecko.com"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.footerLink}
+            className={estilos.linkRodape}
           >
             CoinGecko API
           </a>
-          <span className={styles.footerDot}>·</span>
+          <span className={estilos.separador}>·</span>
           <span>ES47B — Programação Web Fullstack</span>
         </footer>
       </div>
-    </FavoritesProvider>
+    </ProvedorFavoritos>
   )
 }

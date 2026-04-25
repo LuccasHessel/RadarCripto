@@ -1,15 +1,13 @@
-.section {
-  margin-top: 0;
-}
+.secao { margin-top: 0; }
 
-.header {
+.cabecalho {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 14px;
 }
 
-.label {
+.rotulo {
   font-size: 13px;
   font-family: var(--font-mono);
   letter-spacing: 0.1em;
@@ -17,7 +15,7 @@
   color: var(--text3);
 }
 
-.count {
+.contador {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--amber);
@@ -26,7 +24,7 @@
   border-radius: 20px;
 }
 
-.clearBtn {
+.botaoLimpar {
   margin-left: auto;
   background: none;
   border: 1px solid var(--border2);
@@ -38,12 +36,12 @@
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
 }
-.clearBtn:hover {
+.botaoLimpar:hover {
   color: var(--red);
   border-color: rgba(255,92,124,0.4);
 }
 
-.empty {
+.vazio {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,23 +51,11 @@
   border-radius: var(--radius);
 }
 
-.emptyIcon {
-  font-size: 24px;
-  color: var(--text3);
-}
+.iconeVazio  { font-size: 24px; color: var(--text3); }
+.textoVazio  { font-size: 14px; color: var(--text2); }
+.dicaVazio   { font-family: var(--font-mono); font-size: 11px; color: var(--text3); }
 
-.emptyText {
-  font-size: 14px;
-  color: var(--text2);
-}
-
-.emptyHint {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text3);
-}
-
-.list {
+.lista {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -77,7 +63,7 @@
 
 .item {
   display: grid;
-  grid-template-columns: 28px 1fr auto 24px;
+  grid-template-columns: 28px minmax(0,1fr) auto 24px;
   gap: 10px;
   align-items: center;
   padding: 10px 12px;
@@ -94,6 +80,7 @@
   height: 28px;
   border-radius: 50%;
   background: var(--surface2);
+  flex-shrink: 0;
 }
 
 .info {
@@ -102,7 +89,7 @@
   min-width: 0;
 }
 
-.name {
+.nome {
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
@@ -111,28 +98,28 @@
   white-space: nowrap;
 }
 
-.symbol {
+.simbolo {
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--text3);
   letter-spacing: 0.06em;
 }
 
-.right {
+.direita {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
 }
 
-.price {
+.preco {
   font-family: var(--font-mono);
   font-size: 12px;
   color: var(--text);
   white-space: nowrap;
 }
 
-.change {
+.variacao {
   font-family: var(--font-mono);
   font-size: 10px;
   padding: 1px 6px;
@@ -143,7 +130,7 @@
 .neg { color: var(--red);   background: var(--red-bg); }
 .neu { color: var(--text3); background: var(--surface2); }
 
-.removeBtn {
+.botaoRemover {
   background: none;
   border: none;
   cursor: pointer;
@@ -153,4 +140,4 @@
   padding: 2px;
   transition: color 0.2s;
 }
-.removeBtn:hover { color: var(--red); }
+.botaoRemover:hover { color: var(--red); }

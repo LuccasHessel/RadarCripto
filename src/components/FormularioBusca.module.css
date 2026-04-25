@@ -1,27 +1,27 @@
-.wrapper {
+.caixa {
   width: 100%;
 }
 
-.form {
+.formulario {
   background: var(--surface);
   border: 1px solid var(--border2);
   border-radius: var(--radius-lg);
   padding: 20px 24px;
 }
 
-.row {
+.linha {
   display: grid;
   grid-template-columns: 1fr 200px 180px auto;
   gap: 12px;
   align-items: flex-start;
 }
 
-.fieldLarge,
-.fieldSmall {
+.campoGrande,
+.campoPequeno {
   min-width: 0;
 }
 
-.btn {
+.botao {
   height: 40px;
   min-width: 90px;
   background: var(--accent);
@@ -40,21 +40,21 @@
   align-self: flex-start;
 }
 
-.btn:hover:not(:disabled) {
+.botao:hover:not(:disabled) {
   background: var(--accent2);
   transform: translateY(-1px);
 }
 
-.btn:active:not(:disabled) {
+.botao:active:not(:disabled) {
   transform: translateY(0);
 }
 
-.btn:disabled {
+.botao:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
 
-.btnSpinner {
+.botaoSpinner {
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255,255,255,0.3);
@@ -64,7 +64,7 @@
   display: inline-block;
 }
 
-.formErrors {
+.formularioErrors {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -72,14 +72,14 @@
 }
 
 @media (max-width: 768px) {
-  .row {
+  .linha {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto;
   }
-  .fieldLarge {
+  .campoGrande {
     grid-column: 1 / -1;
   }
-  .btn {
+  .botao {
     grid-column: 1 / -1;
     width: 100%;
   }

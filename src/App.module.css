@@ -6,7 +6,7 @@
 }
 
 /* Subtle dot grid background */
-.grid {
+.grade {
   position: fixed;
   inset: 0;
   background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
@@ -16,7 +16,7 @@
 }
 
 /* ── Header ── */
-.header {
+.cabecalho {
   position: sticky;
   top: 0;
   z-index: 100;
@@ -25,7 +25,7 @@
   border-bottom: 1px solid var(--border);
 }
 
-.headerInner {
+.cabecalhoInterno {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 32px;
@@ -41,13 +41,13 @@
   gap: 10px;
 }
 
-.logoMark {
+.logoMarca {
   font-size: 22px;
   color: var(--accent);
   line-height: 1;
 }
 
-.logoText {
+.logoTexto {
   font-family: var(--font-display);
   font-size: 18px;
   font-weight: 800;
@@ -55,7 +55,7 @@
   letter-spacing: -0.02em;
 }
 
-.currencyNav {
+.navMoeda {
   display: flex;
   gap: 4px;
   background: var(--surface);
@@ -64,7 +64,7 @@
   padding: 4px;
 }
 
-.currencyBtn {
+.botaoMoeda {
   background: none;
   border: none;
   color: var(--text3);
@@ -77,17 +77,17 @@
   transition: background 0.2s, color 0.2s;
 }
 
-.currencyBtn:hover {
+.botaoMoeda:hover {
   color: var(--text2);
 }
 
-.currencyActive {
+.moedaAtiva {
   background: var(--accent) !important;
   color: #fff !important;
 }
 
 /* ── Main layout ── */
-.main {
+.principal {
   flex: 1;
   max-width: 1280px;
   width: 100%;
@@ -102,15 +102,15 @@
 }
 
 /* ── Search column ── */
-.searchCol {
+.colunaBusca {
   min-width: 0;
 }
 
-.sectionHeader {
+.cabecalhoSecao {
   margin-bottom: 20px;
 }
 
-.sectionTitle {
+.tituloBusca {
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -118,14 +118,14 @@
   margin-bottom: 4px;
 }
 
-.sectionSub {
+.subtituloBusca {
   font-size: 13px;
   color: var(--text3);
   font-family: var(--font-mono);
 }
 
 /* ── Sidebar ── */
-.sidebar {
+.painel {
   position: sticky;
   top: 80px;
   background: var(--bg2);
@@ -134,12 +134,12 @@
   overflow: hidden;
 }
 
-.tabs {
+.abas {
   display: flex;
   border-bottom: 1px solid var(--border);
 }
 
-.tab {
+.aba {
   flex: 1;
   background: none;
   border: none;
@@ -155,24 +155,24 @@
   margin-bottom: -1px;
 }
 
-.tab:hover {
+.aba:hover {
   color: var(--text2);
   background: var(--surface);
 }
 
-.tabActive {
+.abaAtiva {
   color: var(--accent2) !important;
   border-bottom-color: var(--accent) !important;
 }
 
-.tabContent {
+.conteudoAba {
   padding: 20px 16px;
   max-height: calc(100vh - 160px);
   overflow-y: auto;
 }
 
 /* ── Footer ── */
-.footer {
+.rodape {
   text-align: center;
   padding: 24px 32px;
   font-family: var(--font-mono);
@@ -187,28 +187,28 @@
   z-index: 1;
 }
 
-.footerLink {
+.linkRodape {
   color: var(--accent2);
   text-decoration: none;
   transition: color 0.2s;
 }
-.footerLink:hover { color: var(--accent); }
+.linkRodape:hover { color: var(--accent); }
 
-.footerDot {
+.separador {
   color: var(--border2);
 }
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
-  .main {
+  .principal {
     grid-template-columns: 1fr;
     padding: 24px 16px;
     gap: 24px;
   }
-  .sidebar {
+  .painel {
     position: static;
   }
-  .tabContent {
+  .conteudoAba {
     max-height: 500px;
   }
 }
