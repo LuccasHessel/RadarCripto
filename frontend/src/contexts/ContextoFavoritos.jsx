@@ -3,7 +3,7 @@ import { createContext, useContext, useReducer, useCallback } from 'react'
 const ContextoFavoritos = createContext(null)
 
 const estadoInicial = {
-  favoritos: [], // armazena apenas { id, nome, simbolo, imagem } — sem preço
+  favoritos: [],
 }
 
 function redutorFavoritos(estado, acao) {
@@ -30,7 +30,6 @@ export function ProvedorFavoritos({ children }) {
   const [estado, despachar] = useReducer(redutorFavoritos, estadoInicial)
 
   const adicionarFavorito = useCallback((moeda) => {
-    // Salva apenas dados estáticos — preço é buscado ao vivo por moeda de conversão
     despachar({
       type: 'ADICIONAR',
       payload: {

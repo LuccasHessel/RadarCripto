@@ -1,0 +1,51 @@
+.caixa {
+  margin-top: 30px;
+}
+
+.cabecalho {
+  margin-bottom: 16px;
+}
+
+.titulo {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.subtitulo {
+  font-size: 13px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+}
+
+.formulario {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 20px 24px;
+}
+
+.botao {
+  min-height: 40px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.botao:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .formulario {
+    grid-template-columns: 1fr;
+  }
+}

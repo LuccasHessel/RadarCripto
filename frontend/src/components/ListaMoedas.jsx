@@ -9,7 +9,7 @@ export default function ListaMoedas({ estado, moedaConversao }) {
   if (status === 'ocioso') return null
 
   if (status === 'carregando') {
-    return <CarregandoIndicador rotulo="Consultando CoinGecko..." />
+    return <CarregandoIndicador rotulo="Consultando backend..." />
   }
 
   if (status === 'erro') {
@@ -24,7 +24,7 @@ export default function ListaMoedas({ estado, moedaConversao }) {
     return (
       <div className={estilos.caixa}>
         <MensagemErro
-          mensagem="Nenhuma moeda encontrada para os parâmetros informados."
+          mensagem="Nenhuma moeda encontrada para os parametros informados."
           tipo="info"
         />
       </div>

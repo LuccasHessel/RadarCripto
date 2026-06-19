@@ -3,7 +3,7 @@ import { usarFavoritos } from '../contexts/ContextoFavoritos'
 import estilos from './CartaoMoeda.module.css'
 
 function formatarMoeda(valor, moeda) {
-  if (valor == null) return '—'
+  if (valor == null) return '-'
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: moeda.toUpperCase(),
@@ -13,10 +13,10 @@ function formatarMoeda(valor, moeda) {
 }
 
 function formatarNumeroGrande(valor) {
-  if (valor == null) return '—'
+  if (valor == null) return '-'
   if (valor >= 1e12) return `${(valor / 1e12).toFixed(2)}T`
-  if (valor >= 1e9)  return `${(valor / 1e9).toFixed(2)}B`
-  if (valor >= 1e6)  return `${(valor / 1e6).toFixed(2)}M`
+  if (valor >= 1e9) return `${(valor / 1e9).toFixed(2)}B`
+  if (valor >= 1e6) return `${(valor / 1e6).toFixed(2)}M`
   return valor.toLocaleString('pt-BR')
 }
 
@@ -32,7 +32,7 @@ export default function CartaoMoeda({ moeda, moedaConversao, indice }) {
 
   const textoVariacao = useMemo(() => {
     const v = moeda.price_change_percentage_24h
-    if (v == null) return '—'
+    if (v == null) return '-'
     return `${v > 0 ? '+' : ''}${v.toFixed(2)}%`
   }, [moeda.price_change_percentage_24h])
 
@@ -46,11 +46,11 @@ export default function CartaoMoeda({ moeda, moedaConversao, indice }) {
       className={estilos.cartao}
       style={{ animationDelay: `${indice * 60}ms` }}
     >
-      <div className={estilos.ranking}>#{moeda.market_cap_rank ?? '—'}</div>
+      <div className={estilos.ranking}>#{moeda.market_cap_rank ?? '-'}</div>
 
       <div className={estilos.identidade}>
         <img
-          src={moeda.image}
+          src={moeda.image || '/vite.svg'}
           alt={moeda.name}
           className={estilos.logo}
           loading="lazy"
@@ -84,6 +84,7 @@ export default function CartaoMoeda({ moeda, moedaConversao, indice }) {
         className={`${estilos.botaoFav} ${favoritado ? estilos.favAtivo : ''}`}
         onClick={alternarFavorito}
         aria-label={favoritado ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+        type="button"
       >
         {favoritado ? '★' : '☆'}
       </button>

@@ -9,16 +9,16 @@ const estadoInicial = { status: 'ocioso', precos: {}, erro: null }
 
 function redutor(estado, acao) {
   switch (acao.type) {
-    case 'INICIAR':  return { ...estado, status: 'carregando', erro: null }
-    case 'SUCESSO':  return { status: 'sucesso', precos: acao.payload, erro: null }
-    case 'ERRO':     return { status: 'erro', precos: {}, erro: acao.payload }
-    case 'OCIOSO':   return estadoInicial
+    case 'INICIAR': return { ...estado, status: 'carregando', erro: null }
+    case 'SUCESSO': return { status: 'sucesso', precos: acao.payload, erro: null }
+    case 'ERRO': return { status: 'erro', precos: {}, erro: acao.payload }
+    case 'OCIOSO': return estadoInicial
     default: return estado
   }
 }
 
 function formatarMoeda(valor, moeda) {
-  if (valor == null) return '—'
+  if (valor == null) return '-'
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: moeda.toUpperCase(),
@@ -74,10 +74,10 @@ export default function ListaFavoritos({ moedaConversao }) {
       <div className={estilos.cabecalho}>
         <span className={estilos.rotulo}>Favoritos</span>
         <span className={estilos.contador}>{favoritos.length}</span>
-        <button className={estilos.botaoLimpar} onClick={limparFavoritos}>Limpar</button>
+        <button className={estilos.botaoLimpar} onClick={limparFavoritos} type="button">Limpar</button>
       </div>
 
-      {estado.status === 'carregando' && <CarregandoIndicador rotulo="Atualizando preços..." />}
+      {estado.status === 'carregando' && <CarregandoIndicador rotulo="Atualizando precos..." />}
       {estado.status === 'erro' && <MensagemErro mensagem={estado.erro} tipo="erro" />}
 
       {(estado.status === 'sucesso' || estado.status === 'ocioso') && (
@@ -89,14 +89,14 @@ export default function ListaFavoritos({ moedaConversao }) {
             const isNeg = variacao < 0
             return (
               <div key={fav.id} className={estilos.item} style={{ animationDelay: `${i * 40}ms` }}>
-                <img src={fav.imagem} alt={fav.nome} className={estilos.logo} />
+                <img src={fav.imagem || '/vite.svg'} alt={fav.nome} className={estilos.logo} />
                 <div className={estilos.info}>
                   <span className={estilos.nome}>{fav.nome}</span>
                   <span className={estilos.simbolo}>{fav.simbolo?.toUpperCase()}</span>
                 </div>
                 <div className={estilos.direita}>
                   <span className={estilos.preco}>
-                    {dadosAoVivo ? formatarMoeda(dadosAoVivo.current_price, moedaConversao) : '—'}
+                    {dadosAoVivo ? formatarMoeda(dadosAoVivo.current_price, moedaConversao) : '-'}
                   </span>
                   {variacao != null && (
                     <span className={`${estilos.variacao} ${isPos ? estilos.pos : isNeg ? estilos.neg : estilos.neu}`}>
@@ -108,6 +108,7 @@ export default function ListaFavoritos({ moedaConversao }) {
                   className={estilos.botaoRemover}
                   onClick={() => removerFavorito(fav.id)}
                   aria-label={`Remover ${fav.nome} dos favoritos`}
+                  type="button"
                 >×</button>
               </div>
             )

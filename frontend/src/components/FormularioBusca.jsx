@@ -13,42 +13,42 @@ import {
 import estilos from './FormularioBusca.module.css'
 import ListaMoedas from './ListaMoedas'
 import MensagemErro from './MensagemErro'
-import { buscarIdsPorNome, buscarMoedasPorIds } from '../services/api'
+import { buscarMoedas } from '../services/api'
 
 const esquemaValidacao = yup.object({
   consulta: yup
     .string()
     .trim()
     .min(2, 'Digite ao menos 2 caracteres')
-    .required('O nome ou símbolo da moeda é obrigatório'),
+    .required('O nome ou simbolo da moeda e obrigatorio'),
   moedaConversao: yup
     .string()
-    .oneOf(['brl', 'usd', 'eur'], 'Selecione uma moeda válida')
-    .required('Selecione a moeda de conversão'),
+    .oneOf(['brl', 'usd', 'eur'], 'Selecione uma moeda valida')
+    .required('Selecione a moeda de conversao'),
   ordenacao: yup.string().required(),
 })
 
 const MOEDAS_CONVERSAO = [
-  { valor: 'brl', rotulo: 'BRL — Real Brasileiro' },
-  { valor: 'usd', rotulo: 'USD — Dólar Americano' },
-  { valor: 'eur', rotulo: 'EUR — Euro' },
+  { valor: 'brl', rotulo: 'BRL - Real Brasileiro' },
+  { valor: 'usd', rotulo: 'USD - Dolar Americano' },
+  { valor: 'eur', rotulo: 'EUR - Euro' },
 ]
 
 const OPCOES_ORDENACAO = [
-  { valor: 'market_cap_desc', rotulo: 'Market Cap ↓' },
-  { valor: 'market_cap_asc',  rotulo: 'Market Cap ↑' },
-  { valor: 'volume_desc',     rotulo: 'Volume ↓' },
-  { valor: 'gecko_desc',      rotulo: 'Relevância' },
+  { valor: 'market_cap_desc', rotulo: 'Market Cap desc' },
+  { valor: 'market_cap_asc',  rotulo: 'Market Cap asc' },
+  { valor: 'volume_desc',     rotulo: 'Volume desc' },
+  { valor: 'gecko_desc',      rotulo: 'Relevancia' },
 ]
 
 const estadoInicial = { status: 'ocioso', dados: null, erro: null }
 
 function redutorBusca(estado, acao) {
   switch (acao.type) {
-    case 'INICIAR':   return { status: 'carregando', dados: null, erro: null }
-    case 'SUCESSO':   return { status: 'sucesso', dados: acao.payload, erro: null }
-    case 'ERRO':      return { status: 'erro', dados: null, erro: acao.payload }
-    case 'RESETAR':   return estadoInicial
+    case 'INICIAR': return { status: 'carregando', dados: null, erro: null }
+    case 'SUCESSO': return { status: 'sucesso', dados: acao.payload, erro: null }
+    case 'ERRO': return { status: 'erro', dados: null, erro: acao.payload }
+    case 'RESETAR': return estadoInicial
     default: return estado
   }
 }
@@ -73,16 +73,7 @@ export default function FormularioBusca() {
   const aoEnviar = useCallback(async (valores) => {
     despachar({ type: 'INICIAR' })
     try {
-      const ids = await buscarIdsPorNome(valores.consulta)
-      if (ids.length === 0) {
-        despachar({ type: 'SUCESSO', payload: [] })
-        return
-      }
-      const dados = await buscarMoedasPorIds({
-        ids,
-        moedaConversao: valores.moedaConversao,
-        ordenacao: valores.ordenacao,
-      })
+      const dados = await buscarMoedas(valores)
       despachar({ type: 'SUCESSO', payload: dados })
     } catch (err) {
       despachar({ type: 'ERRO', payload: err.message })
@@ -102,7 +93,7 @@ export default function FormularioBusca() {
         <div className={estilos.linha}>
           <div className={estilos.campoGrande}>
             <TextField
-              label="Moeda (nome ou símbolo)"
+              label="Moeda (nome ou simbolo)"
               placeholder="Ex: bitcoin, ETH, solana..."
               fullWidth
               variant="outlined"
@@ -116,12 +107,12 @@ export default function FormularioBusca() {
 
           <div className={estilos.campoPequeno}>
             <FormControl fullWidth size="small" error={!!errors.moedaConversao}>
-              <InputLabel>Moeda de conversão</InputLabel>
+              <InputLabel>Moeda de conversao</InputLabel>
               <Controller
                 name="moedaConversao"
                 control={control}
                 render={({ field }) => (
-                  <Select label="Moeda de conversão" {...field}>
+                  <Select label="Moeda de conversao" {...field}>
                     {MOEDAS_CONVERSAO.map(m => (
                       <MenuItem key={m.valor} value={m.valor}>{m.rotulo}</MenuItem>
                     ))}

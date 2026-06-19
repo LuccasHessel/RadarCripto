@@ -9,15 +9,15 @@ const estadoInicial = { status: 'ocioso', dados: null, erro: null }
 
 function redutor(estado, acao) {
   switch (acao.type) {
-    case 'INICIAR':  return { ...estado, status: 'carregando', erro: null }
-    case 'SUCESSO':  return { status: 'sucesso', dados: acao.payload, erro: null }
-    case 'ERRO':     return { status: 'erro', dados: null, erro: acao.payload }
+    case 'INICIAR': return { ...estado, status: 'carregando', erro: null }
+    case 'SUCESSO': return { status: 'sucesso', dados: acao.payload, erro: null }
+    case 'ERRO': return { status: 'erro', dados: null, erro: acao.payload }
     default: return estado
   }
 }
 
 function formatarPreco(valor, moeda) {
-  if (valor == null) return '—'
+  if (valor == null) return '-'
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: moeda.toUpperCase(),
@@ -26,7 +26,7 @@ function formatarPreco(valor, moeda) {
   }).format(valor)
 }
 
-export default function RankingTop({ moedaConversao }) {
+export default function RankingTop({ moedaConversao, atualizacao = 0 }) {
   const [estado, despachar] = useReducer(redutor, estadoInicial)
   const { ehFavorito, adicionarFavorito, removerFavorito } = usarFavoritos()
 
@@ -43,7 +43,7 @@ export default function RankingTop({ moedaConversao }) {
     }
     carregarRanking()
     return () => { cancelado = true }
-  }, [moedaConversao])
+  }, [moedaConversao, atualizacao])
 
   const dadosOrdenados = useMemo(() => {
     if (!estado.dados) return []
@@ -56,7 +56,7 @@ export default function RankingTop({ moedaConversao }) {
     <section className={estilos.secao}>
       <div className={estilos.cabecalho}>
         <span className={estilos.rotulo}>Top 10</span>
-        <span className={estilos.subrotulo}>por capitalização de mercado</span>
+        <span className={estilos.subrotulo}>por capitalizacao de mercado</span>
       </div>
 
       {estado.status === 'carregando' && <CarregandoIndicador rotulo="Carregando ranking..." />}
@@ -67,7 +67,7 @@ export default function RankingTop({ moedaConversao }) {
           <div className={estilos.cabecalhoTabela}>
             <span>#</span>
             <span>Moeda</span>
-            <span>Preço</span>
+            <span>Preco</span>
             <span>24h</span>
             <span></span>
           </div>
@@ -82,10 +82,10 @@ export default function RankingTop({ moedaConversao }) {
                 className={estilos.linha}
                 style={{ animationDelay: `${i * 50}ms` }}
               >
-                <span className={estilos.posicao}>{moeda.market_cap_rank}</span>
+                <span className={estilos.posicao}>{moeda.market_cap_rank ?? '-'}</span>
 
                 <div className={estilos.moeda}>
-                  <img src={moeda.image} alt={moeda.name} className={estilos.logo} />
+                  <img src={moeda.image || '/vite.svg'} alt={moeda.name} className={estilos.logo} />
                   <div className={estilos.infoMoeda}>
                     <div className={estilos.nomeMoeda}>{moeda.name}</div>
                     <div className={estilos.simboloMoeda}>{moeda.symbol?.toUpperCase()}</div>
@@ -97,13 +97,14 @@ export default function RankingTop({ moedaConversao }) {
                 </span>
 
                 <span className={`${estilos.variacao} ${isPos ? estilos.pos : isNeg ? estilos.neg : estilos.neu}`}>
-                  {variacao != null ? `${isPos ? '+' : ''}${variacao.toFixed(2)}%` : '—'}
+                  {variacao != null ? `${isPos ? '+' : ''}${variacao.toFixed(2)}%` : '-'}
                 </span>
 
                 <button
                   className={`${estilos.botaoFav} ${fav ? estilos.favAtivo : ''}`}
                   onClick={() => fav ? removerFavorito(moeda.id) : adicionarFavorito(moeda)}
                   aria-label={fav ? 'Remover favorito' : 'Favoritar'}
+                  type="button"
                 >
                   {fav ? '★' : '☆'}
                 </button>

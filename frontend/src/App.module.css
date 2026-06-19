@@ -33,6 +33,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 
 .logo {
@@ -84,6 +85,27 @@
 .moedaAtiva {
   background: var(--accent) !important;
   color: #fff !important;
+}
+
+.sessao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text2);
+  font-size: 12px;
+}
+
+.botaoSair {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  cursor: pointer;
+  padding: 6px 12px;
+}
+
+.botaoSair:hover {
+  border-color: var(--accent);
 }
 
 /* ── Main layout ── */
@@ -198,8 +220,20 @@
   color: var(--border2);
 }
 
+.telaCarregamento {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
+  .cabecalhoInterno {
+    height: auto;
+    min-height: 60px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+  }
   .principal {
     grid-template-columns: 1fr;
     padding: 24px 16px;

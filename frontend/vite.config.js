@@ -3,12 +3,14 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    minify: 'esbuild',
+  },
   server: {
     proxy: {
-      '/api/coingecko': {
-        target: 'https://api.coingecko.com/api/v3',
+      '/api': {
+        target: 'http://localhost:3001',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/coingecko/, ''),
       },
     },
   },
