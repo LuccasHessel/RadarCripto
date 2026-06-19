@@ -3,9 +3,6 @@ import {
   buscarSessaoAtual,
   login as loginApi,
   logout as logoutApi,
-  obterToken,
-  removerToken,
-  salvarToken,
 } from '../services/api'
 
 const ContextoAutenticacao = createContext(null)
@@ -17,15 +14,12 @@ export function ProvedorAutenticacao({ children }) {
   useEffect(() => {
     let cancelado = false
     async function carregarSessao() {
-      if (!obterToken()) {
-        setCarregandoSessao(false)
-        return
-      }
       try {
+        // A sessao vive em um cookie httpOnly: perguntamos ao servidor
+        // se ha uma sessao valida em vez de checar algo no navegador.
         const resposta = await buscarSessaoAtual()
         if (!cancelado) setUsuario(resposta.usuario)
       } catch {
-        removerToken()
         if (!cancelado) setUsuario(null)
       } finally {
         if (!cancelado) setCarregandoSessao(false)
@@ -37,7 +31,6 @@ export function ProvedorAutenticacao({ children }) {
 
   const entrar = useCallback(async ({ email, senha }) => {
     const resposta = await loginApi(email, senha)
-    salvarToken(resposta.token)
     setUsuario(resposta.usuario)
   }, [])
 
@@ -45,7 +38,6 @@ export function ProvedorAutenticacao({ children }) {
     try {
       await logoutApi()
     } finally {
-      removerToken()
       setUsuario(null)
     }
   }, [])

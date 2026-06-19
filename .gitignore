@@ -5,3 +5,8 @@ dist-ssr
 .env
 .env.local
 .DS_Store
+backend/certs/
+backend/security.log
+backend/*.sqlite
+backend/*.sqlite-shm
+backend/*.sqlite-wal

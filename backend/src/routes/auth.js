@@ -2,9 +2,12 @@ import express from 'express'
 import { buscarUsuarioPorEmail } from '../models/Usuario.js'
 import { buscarSessaoAtiva, criarSessao, revogarSessao } from '../models/Sessao.js'
 import {
+  criarCookieSessao,
   criarTokenSessao,
+  ehConexaoSegura,
   hashToken,
   limitarTentativasLogin,
+  limparCookieSessao,
   registrarEvento,
   sanitizarTexto,
   validarCamposObrigatorios,
@@ -14,8 +17,7 @@ import {
 const router = express.Router()
 
 export async function autenticar(req, res, next) {
-  const cabecalho = req.headers.authorization || ''
-  const token = cabecalho.startsWith('Bearer ') ? cabecalho.slice(7) : ''
+  const token = req.cookies?.radar_cripto_sessao || ''
   if (!token) return res.status(401).json({ mensagem: 'Sessao ativa obrigatoria.' })
 
   const sessao = buscarSessaoAtiva(hashToken(token))
@@ -49,8 +51,8 @@ router.post('/login', limitarTentativasLogin, (req, res) => {
   criarSessao({ tokenHash: sessao.tokenHash, usuarioId: usuario.id, expiraEm: sessao.expiraEm })
   registrarEvento('login_sucesso', { usuarioId: usuario.id })
 
+  res.setHeader('Set-Cookie', criarCookieSessao(sessao.token, sessao.expiraEm, ehConexaoSegura(req)))
   res.json({
-    token: sessao.token,
     expiraEm: sessao.expiraEm,
     usuario: { id: usuario.id, nome: usuario.nome, email: usuario.email },
   })
@@ -63,6 +65,7 @@ router.get('/me', autenticar, (req, res) => {
 router.post('/logout', autenticar, (req, res) => {
   revogarSessao(req.usuario.tokenHash)
   registrarEvento('logout', { usuarioId: req.usuario.id })
+  res.setHeader('Set-Cookie', limparCookieSessao(ehConexaoSegura(req)))
   res.status(204).end()
 })
 

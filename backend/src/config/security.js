@@ -138,6 +138,52 @@ export function limitarTentativasLogin(req, res, next) {
   next()
 }
 
+export function criarCookieSessao(token, expiraEm, seguro) {
+  const maxAgeSegundos = Math.max(0, Math.floor((new Date(expiraEm).getTime() - Date.now()) / 1000))
+  const atributos = [
+    `radar_cripto_sessao=${token}`,
+    'HttpOnly',
+    'Path=/',
+    'SameSite=Strict',
+    `Max-Age=${maxAgeSegundos}`,
+  ]
+  if (seguro) atributos.push('Secure')
+  return atributos.join('; ')
+}
+
+export function limparCookieSessao(seguro) {
+  const atributos = [
+    'radar_cripto_sessao=',
+    'HttpOnly',
+    'Path=/',
+    'SameSite=Strict',
+    'Max-Age=0',
+  ]
+  if (seguro) atributos.push('Secure')
+  return atributos.join('; ')
+}
+
+export function analisarCookies(cabecalho = '') {
+  return Object.fromEntries(
+    String(cabecalho || '')
+      .split(';')
+      .map((parte) => parte.trim())
+      .filter(Boolean)
+      .map((parte) => {
+        const indice = parte.indexOf('=')
+        if (indice === -1) return [parte, '']
+        return [
+          decodeURIComponent(parte.slice(0, indice)),
+          decodeURIComponent(parte.slice(indice + 1)),
+        ]
+      })
+  )
+}
+
+export function ehConexaoSegura(req) {
+  return Boolean(req.secure || req.headers['x-forwarded-proto'] === 'https')
+}
+
 export function registrarEvento(tipo, dados = {}) {
   const linha = JSON.stringify({
     data: new Date().toISOString(),

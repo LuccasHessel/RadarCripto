@@ -6,7 +6,8 @@
   "packageManager": "pnpm@9.12.3",
   "scripts": {
     "dev": "node --watch server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "gerar-certificado": "bash gerar-certificado.sh"
   },
   "dependencies": {
     "express": "^4.19.2"

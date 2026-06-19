@@ -1,29 +1,17 @@
 const BASE = '/api'
-const TOKEN_KEY = 'radar_cripto_token'
-
-export function obterToken() {
-  return localStorage.getItem(TOKEN_KEY)
-}
-
-export function salvarToken(token) {
-  localStorage.setItem(TOKEN_KEY, token)
-}
-
-export function removerToken() {
-  localStorage.removeItem(TOKEN_KEY)
-}
 
 async function apiFetch(path, options = {}) {
-  const token = obterToken()
   const headers = {
     'Content-Type': 'application/json',
     ...(options.headers || {}),
   }
-  if (token) headers.Authorization = `Bearer ${token}`
 
   const res = await fetch(`${BASE}${path}`, {
     ...options,
     headers,
+    // A sessao e mantida em um cookie httpOnly definido pelo servidor,
+    // entao o navegador precisa enviar/receber cookies nas requisicoes.
+    credentials: 'include',
   })
   if (res.status === 204) return null
   const data = await res.json().catch(() => ({}))
