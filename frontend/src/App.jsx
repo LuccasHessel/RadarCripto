@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ProvedorAutenticacao, usarAutenticacao } from './contexts/ContextoAutenticacao'
 import { ProvedorFavoritos } from './contexts/ContextoFavoritos'
+import { useNotificacoesTempoReal } from './hooks/useNotificacoesTempoReal'
 import FormularioBusca from './components/FormularioBusca'
 import RankingTop from './components/RankingTop'
 import ListaFavoritos from './components/ListaFavoritos'
+import MinhasMoedas from './components/MinhasMoedas'
 import CadastroMoeda from './components/CadastroMoeda'
 import Login from './components/Login'
 import CarregandoIndicador from './components/CarregandoIndicador'
@@ -15,7 +17,19 @@ function AplicacaoAutenticada() {
   const [moedaConversao, setMoedaConversao] = useState('usd')
   const [abaAtiva, setAbaAtiva] = useState('ranking')
   const [atualizacaoRanking, setAtualizacaoRanking] = useState(0)
-  const { usuario, sair } = usarAutenticacao()
+  const { usuario, token, sair } = usarAutenticacao()
+
+  // RF6 - conecta ao notification-service assim que o usuario esta
+  // autenticado; qualquer evento de escrita (criacao/atualizacao/
+  // exclusao) recebido via WebSocket dispara a atualizacao automatica
+  // das listagens, sem a necessidade de recarregar a pagina.
+  const { ultimoEvento, conectado } = useNotificacoesTempoReal(token)
+
+  useEffect(() => {
+    if (ultimoEvento) {
+      setAtualizacaoRanking(v => v + 1)
+    }
+  }, [ultimoEvento])
 
   return (
     <ProvedorFavoritos>
@@ -41,6 +55,12 @@ function AplicacaoAutenticada() {
               ))}
             </nav>
             <div className={estilos.sessao}>
+              <span
+                title={conectado ? 'Notificacoes em tempo real conectadas' : 'Notificacoes desconectadas'}
+                style={{ color: conectado ? '#22c55e' : '#71717a', fontSize: 18, lineHeight: 1 }}
+              >
+                ●
+              </span>
               <span>{usuario?.nome}</span>
               <button className={estilos.botaoSair} onClick={sair} type="button">Sair</button>
             </div>
@@ -52,7 +72,7 @@ function AplicacaoAutenticada() {
             <div className={estilos.cabecalhoSecao}>
               <h2 className={estilos.tituloBusca}>Buscar moeda</h2>
               <p className={estilos.subtituloBusca}>
-                Digite o nome ou simbolo e consulte dados pelo backend
+                Digite o nome ou simbolo e consulte dados pelo resource-service
               </p>
             </div>
             <FormularioBusca />
@@ -75,6 +95,13 @@ function AplicacaoAutenticada() {
               >
                 Favoritos
               </button>
+              <button
+                className={`${estilos.aba} ${abaAtiva === 'minhas' ? estilos.abaAtiva : ''}`}
+                onClick={() => setAbaAtiva('minhas')}
+                type="button"
+              >
+                Minhas moedas
+              </button>
             </div>
             <div className={estilos.conteudoAba}>
               {abaAtiva === 'ranking' && (
@@ -84,6 +111,7 @@ function AplicacaoAutenticada() {
                 />
               )}
               {abaAtiva === 'favoritos' && <ListaFavoritos moedaConversao={moedaConversao} />}
+              {abaAtiva === 'minhas' && <MinhasMoedas atualizacao={atualizacaoRanking} />}
             </div>
           </aside>
         </main>
@@ -91,9 +119,9 @@ function AplicacaoAutenticada() {
         <footer className={estilos.rodape}>
           <span>Front-end React</span>
           <span className={estilos.separador}>·</span>
-          <span>Back-end Express + SQLite</span>
+          <span>auth-service · resource-service · notification-service</span>
           <span className={estilos.separador}>·</span>
-          <span>ES47B - Programacao Web Fullstack</span>
+          <span>ES47B - Programacao Web Fullstack - Projeto 2</span>
         </footer>
       </div>
     </ProvedorFavoritos>

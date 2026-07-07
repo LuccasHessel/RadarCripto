@@ -1,14 +1,19 @@
 {
   "name": "radar-cripto-fullstack",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "packageManager": "pnpm@9.12.3",
   "scripts": {
-    "dev": "npm run dev --prefix backend",
-    "dev:backend": "npm run dev --prefix backend",
+    "install:all": "npm install --prefix auth-service && npm install --prefix resource-service && npm install --prefix notification-service && npm install --prefix frontend",
+    "dev": "concurrently -n auth,resource,notification,frontend -c blue,green,magenta,yellow \"npm run dev --prefix auth-service\" \"npm run dev --prefix resource-service\" \"npm run dev --prefix notification-service\" \"npm run dev --prefix frontend\"",
+    "dev:auth": "npm run dev --prefix auth-service",
+    "dev:resource": "npm run dev --prefix resource-service",
+    "dev:notification": "npm run dev --prefix notification-service",
     "dev:frontend": "npm run dev --prefix frontend",
-    "build": "npm run build --prefix frontend",
-    "start": "npm run start --prefix backend"
+    "build": "npm run build --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

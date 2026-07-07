@@ -1,12 +1,13 @@
 import { obterConexao } from '../config/database.js'
 
 export function inserirMoeda(dados) {
+  const agora = new Date().toISOString()
   const resultado = obterConexao().prepare(`
     INSERT INTO moedas (
       nome, simbolo, preco_atual, moeda_conversao, capitalizacao_mercado,
-      volume_24h, variacao_24h, imagem, criado_por, criado_em
+      volume_24h, variacao_24h, imagem, criado_por, criado_por_nome, criado_em
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     dados.nome,
     dados.simbolo,
@@ -17,13 +18,44 @@ export function inserirMoeda(dados) {
     dados.variacao24h,
     dados.imagem,
     dados.usuarioId,
-    new Date().toISOString()
+    dados.usuarioNome || null,
+    agora
   )
-  return buscarMoedaPorId(resultado.lastInsertRowid)
+  return buscarMoedaBrutaPorId(resultado.lastInsertRowid)
+}
+
+export function atualizarMoeda(id, dados) {
+  obterConexao().prepare(`
+    UPDATE moedas SET
+      nome = ?, simbolo = ?, preco_atual = ?, moeda_conversao = ?,
+      capitalizacao_mercado = ?, volume_24h = ?, variacao_24h = ?, imagem = ?,
+      atualizado_em = ?
+    WHERE id = ?
+  `).run(
+    dados.nome,
+    dados.simbolo,
+    dados.precoAtual,
+    dados.moedaConversao,
+    dados.capitalizacaoMercado,
+    dados.volume24h,
+    dados.variacao24h,
+    dados.imagem,
+    new Date().toISOString(),
+    id
+  )
+  return buscarMoedaBrutaPorId(id)
+}
+
+export function excluirMoeda(id) {
+  obterConexao().prepare('DELETE FROM moedas WHERE id = ?').run(id)
+}
+
+export function buscarMoedaBrutaPorId(id) {
+  return obterConexao().prepare('SELECT * FROM moedas WHERE id = ?').get(id)
 }
 
 export function buscarMoedaPorId(id) {
-  const moeda = obterConexao().prepare('SELECT * FROM moedas WHERE id = ?').get(id)
+  const moeda = buscarMoedaBrutaPorId(id)
   return moeda ? mapearMoeda(moeda) : null
 }
 
@@ -65,6 +97,16 @@ export function buscarMoedasLocaisPorIds(ids, moedaConversao = 'usd') {
   return linhas.map(mapearMoeda)
 }
 
+// Lista somente os recursos pertencentes ao usuario autenticado - usada
+// pelo Front-end como ponto de partida para Atualizacao (RF4) e
+// Exclusao (RF5).
+export function listarMoedasDoUsuario(usuarioId) {
+  const linhas = obterConexao().prepare(`
+    SELECT * FROM moedas WHERE criado_por = ? ORDER BY criado_em DESC
+  `).all(usuarioId)
+  return linhas.map(mapearMoeda)
+}
+
 function mapearMoeda(moeda) {
   return {
     id: `local-${moeda.id}`,
@@ -77,5 +119,8 @@ function mapearMoeda(moeda) {
     image: moeda.imagem || '',
     market_cap_rank: null,
     origem: 'local',
+    moedaConversao: moeda.moeda_conversao,
+    criadoPor: moeda.criado_por,
+    criadoPorNome: moeda.criado_por_nome,
   }
 }

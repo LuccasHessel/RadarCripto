@@ -1,0 +1,13 @@
+version: "3.8"
+
+# Sobe apenas a dependencia externa de infraestrutura (fila de
+# mensagens / cache de blacklist). Os 3 microsservicos e o frontend
+# continuam sendo executados via linha de comando (npm run dev),
+# conforme exigido na apresentacao do projeto.
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: radar-cripto-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped

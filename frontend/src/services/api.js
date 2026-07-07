@@ -1,48 +1,71 @@
-const BASE = '/api'
+const AUTH_BASE = import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:3001'
+const RESOURCE_BASE = import.meta.env.VITE_RESOURCE_SERVICE_URL || 'http://localhost:3002'
 
-async function apiFetch(path, options = {}) {
+let tokenAtual = null
+
+export function definirToken(token) {
+  tokenAtual = token
+}
+
+export function obterToken() {
+  return tokenAtual
+}
+
+async function apiFetch(base, path, options = {}) {
   const headers = {
     'Content-Type': 'application/json',
     ...(options.headers || {}),
   }
+  if (tokenAtual) {
+    headers.Authorization = `Bearer ${tokenAtual}`
+  }
 
-  const res = await fetch(`${BASE}${path}`, {
-    ...options,
-    headers,
-    // A sessao e mantida em um cookie httpOnly definido pelo servidor,
-    // entao o navegador precisa enviar/receber cookies nas requisicoes.
-    credentials: 'include',
-  })
+  const res = await fetch(`${base}${path}`, { ...options, headers })
   if (res.status === 204) return null
   const data = await res.json().catch(() => ({}))
 
   if (!res.ok) {
-    throw new Error(data.mensagem || 'Nao foi possivel concluir a requisicao.')
+    const erro = new Error(data.mensagem || 'Nao foi possivel concluir a requisicao.')
+    erro.status = res.status
+    throw erro
   }
   return data
 }
 
+// ---------- auth-service ----------
 export async function login(email, senha) {
-  return apiFetch('/auth/login', {
+  const resposta = await apiFetch(AUTH_BASE, '/login', {
     method: 'POST',
     body: JSON.stringify({ email, senha }),
   })
+  definirToken(resposta.token)
+  return resposta
 }
 
 export async function buscarSessaoAtual() {
-  return apiFetch('/auth/me')
+  return apiFetch(AUTH_BASE, '/me')
 }
 
 export async function logout() {
-  return apiFetch('/auth/logout', { method: 'POST' })
+  try {
+    return await apiFetch(AUTH_BASE, '/logout', { method: 'POST' })
+  } finally {
+    definirToken(null)
+  }
 }
 
+// ---------- resource-service ----------
 export async function buscarMoedas({ consulta, moedaConversao, ordenacao }) {
-  const data = await apiFetch(`/moedas?${new URLSearchParams({
+  const data = await apiFetch(RESOURCE_BASE, `/?${new URLSearchParams({
     consulta,
     moedaConversao,
     ordenacao,
   })}`)
+  return data.dados || []
+}
+
+export async function buscarMinhasMoedas() {
+  const data = await apiFetch(RESOURCE_BASE, '/minhas')
   return data.dados || []
 }
 
@@ -63,19 +86,32 @@ export async function buscarMoedasPorIds({ ids, moedaConversao, ordenacao }) {
 }
 
 export async function inserirMoeda(dados) {
-  return apiFetch('/moedas', {
+  return apiFetch(RESOURCE_BASE, '/', {
     method: 'POST',
     body: JSON.stringify(dados),
   })
 }
 
+export async function atualizarMoeda(id, dados) {
+  const idNumerico = String(id).replace('local-', '')
+  return apiFetch(RESOURCE_BASE, `/${idNumerico}`, {
+    method: 'PUT',
+    body: JSON.stringify(dados),
+  })
+}
+
+export async function excluirMoeda(id) {
+  const idNumerico = String(id).replace('local-', '')
+  return apiFetch(RESOURCE_BASE, `/${idNumerico}`, { method: 'DELETE' })
+}
+
 export async function buscarRanking(moedaConversao) {
-  const data = await apiFetch(`/moedas/ranking?${new URLSearchParams({ moedaConversao })}`)
+  const data = await apiFetch(RESOURCE_BASE, `/ranking?${new URLSearchParams({ moedaConversao })}`)
   return data.dados || []
 }
 
 export async function buscarPrecoAtualizado(ids, moedaConversao) {
-  const data = await apiFetch(`/moedas/precos?${new URLSearchParams({
+  const data = await apiFetch(RESOURCE_BASE, `/precos?${new URLSearchParams({
     ids: ids.join(','),
     moedaConversao,
   })}`)

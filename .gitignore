@@ -4,9 +4,16 @@ dist-ssr
 *.local
 .env
 .env.local
+.env.example
 .DS_Store
-backend/certs/
-backend/security.log
-backend/*.sqlite
-backend/*.sqlite-shm
-backend/*.sqlite-wal
+
+# Bancos de dados locais de cada microsservico (persistencia isolada)
+auth-service/*.sqlite
+auth-service/*.sqlite-shm
+auth-service/*.sqlite-wal
+resource-service/*.sqlite
+resource-service/*.sqlite-shm
+resource-service/*.sqlite-wal
+
+# Logs
+logs/*.log
